@@ -1,0 +1,23 @@
+<topsApp>
+  <component name="topsinsar">
+    <property name="do unwrap">True</property>
+    <property name="unwrapper name">snaphu_mcf</property>
+    <property name="geocode list">['merged/phsig.cor', 'merged/filt_topophase.unw']</property>
+    <property name="do esd">False</property>
+    {% if dem_filename %}
+    <property name="dem filename">/projects/jojo8550/dems/Lagos/5m/dem.envi</property>
+    {% endif %}
+    <component name="master">
+      <property name="output directory">master</property>
+      <property name="safe">{{ reference_granule.directory }}</property>
+      <property name="orbit file">{{ reference_granule.orbit_file }}</property>
+    </component>
+    <component name="slave">
+      <property name="output directory">slave</property>
+      <property name="safe">{{ secondary_granule.directory }}</property>
+      <property name="orbit file">{{ secondary_granule.orbit_file }}</property>
+    </component>
+    <property name="region of interest">[6.0229007, 7.0312007, 3.0039348, 4.0172348]</property>
+    <property name="geocode bounding box">[6.0229007, 7.0312007, 3.0039348, 4.0172348]</property>
+  </component>
+</topsApp>
