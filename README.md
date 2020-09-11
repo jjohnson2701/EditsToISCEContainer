@@ -2,7 +2,7 @@
 Edits to code provided by CU Boulder Research Computing container to run on RMACC. Their container can be found here: https://github.com/ResearchComputing/asf-insar-singularity
 That container is based on the Docker provided by ASF Vertex here: https://github.com/asfadmin/apt-insar
 
-Notes here are based on my workflow and subject to future change and clarification. Screenshots of particular steps to soon come
+Notes here are based on my workflow and subject to future change and clarification. Screenshots of particular steps to soon come. Currently in the following google doc: https://docs.google.com/document/d/1LAg0LL7I1km-GsywRS7GRg-eoM9lgSfYTsFIydGYXHY/edit?usp=sharing
 
 ## ISCE with Research computing setup: Steps for using your own DEM and submitting job arrays
 
