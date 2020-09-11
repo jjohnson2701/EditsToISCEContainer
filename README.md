@@ -12,7 +12,7 @@ Notes here are based on my workflow and subject to future change and clarificati
 * jobscript_5m_array.sh
 * arcgis_template.xml
 * topsApp_5m template.xml
-* SARimagelistexample.txt (You will need to make a reference list and a secondary list from this)
+* LagosP1F16Asc.txt (You will need to make a reference list and a secondary list from this)
 
 ### 3. Edit jobscript_5m_array settings. Relevant ones to change are listed here in the order they appear:
  #SBATCH --ntasks sets the number of tasks per job. It is more efficient to run larger batched jobs with the least number of tasks possible, while still finishing the job under 24 hours.
@@ -25,8 +25,8 @@ SARimagelistexample.txt is set to a text file list of SLC images to process sequ
 
 #Extract names of granules for given array ID. You will need to make a list pairs, or in this case a reference secondary image list. More on this in step 5. My naming convention has the path, frame, and other info included. 
 
-REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" MumbaiP34F527DescVVgranules.txt)
-SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" MumbaiP34F527DescVVgranules.txt)
+REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosP1F16Asc.txt)
+SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 	
 
 JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
