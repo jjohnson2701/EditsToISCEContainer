@@ -1,17 +1,20 @@
 # EditsToISCEContainer
 Edits to code provided by CU Boudler Research Computing container to run on RMACC. Their container can be found here: https://github.com/ResearchComputing/asf-insar-singularity
+That container is based on the Docker provided by ASF Vertex here: https://github.com/asfadmin/apt-insar
 
-ISCE with Research computing setup: Steps for using your own DEM and submitting job arrays
+Notes here are based on my workflow and subject to future change and clarification
 
-1. Follow all the steps to download the ASF DOCKER from the RC Computing github: https://github.com/ResearchComputing/asf-insar-singularity
+# ISCE with Research computing setup: Steps for using your own DEM and submitting job arrays
 
-2. Copy the following files into the containers directory, which is created in the installation in step one. 
+# 1. Follow all the steps to download the ASF DOCKER from the RC Computing github: https://github.com/ResearchComputing/asf-insar-singularity
+
+# 2. Copy the following files into your containers directory, which is created in the installation in step one. 
 jobscript_5m_array.sh
 arcgis_template.xml
 topsApp_5m template.xml
 SARimagelistexample.txt (You will need to make a reference list and a secondary list from this) *subject to future changes
 
-3. Edit jobscript_5m_array settings. Relevant ones to change are listed here in the order they appear:
+# 3. Edit jobscript_5m_array settings. Relevant ones to change are listed here in the order they appear:
  #SBATCH --ntasks sets the number of tasks per job. It is more efficient to run larger batched jobs with the least number of tasks possible, while still finishing the job under 24 hours.
  
 #SBATCH --mail-user input for the email address of the user, which receives an alert when the job finishes running
@@ -28,7 +31,7 @@ SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" MumbaiP34F527DescVVgran
 
 JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
 Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
-4. DEM setup: 
+# 4. DEM setup: 
 The DOCKER wants a dem in  “dem.envi” format, and I have not changed. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
 ($ gdal_translate -of envi smaller_10m.tif mumbai10m.envi)
 
@@ -40,7 +43,7 @@ Copy both the DEM and the of these files into summit, in a directory you specify
 
 Rename both the dem and the associated xml file as dem.envi and dem.envi.xml so they work with the docker seamlessly
 
-DEM setup part B: 
+# DEM setup part B: 
 open topsApp_template5m.xml.
 
 Edit the <property name=”dem filename”> path to match wherever you store your DEM on summit. 
@@ -55,7 +58,7 @@ I then add in the following region of interest and geocode bounding box so only 
 Lagos DEM bounding: 6.0229007, 7.0312007, 3.0039348, 4.0172348 
 
 
-5. SAR granules list setup. It is possible to get these lists from a couple different sites, and to generate lists that do more than run sequentially. As an example, here’s the one I used for my setup
+# 5. SAR granules list setup. It is possible to get these lists from a couple different sites, and to generate lists that do more than run sequentially. As an example, here’s the one I used for my setup
 	Start at https://search.asf.alaska.edu/#/ 
 	
 	Select your geographic area of interest with dataset of Sentinel 1, File type L1 SLC, as pictured below
