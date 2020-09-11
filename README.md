@@ -38,8 +38,9 @@ The DOCKER wants a dem in  “dem.envi” format, and I have not changed. Conver
 Create an .xml file for the DEM. The automated gdal creation with the previous command is .aux.xml, which is not what you need. Use gdal2isce_xml.py, which creates an envi.xml file for you. 
 ($ gdal2isce_xml.py -i mumbai10m.envi)
 
-Copy both the DEM and the of these files into summit, in a directory you specify to the container in the following step. The example has my path, which follows the infrastructure displayed at the bottom. *show how to transfer
+Copy both the DEM and the of these files into summit, in a directory you specify to the container in the following step. The example has my path, which follows the infrastructure displayed at the bottom. 
 
+* In the future I will have instructions on how to make this transfer. Easiest way for large transfers is globus connect. 
 
 Rename both the dem and the associated xml file as dem.envi and dem.envi.xml so they work with the docker seamlessly
 
@@ -48,26 +49,19 @@ open topsApp_template5m.xml.
 
 Edit the <property name=”dem filename”> path to match wherever you store your DEM on summit. 
 
-For best results, I recommend also running gdal_info on your local DEM, and getting a coordinate list of the boundaries of your DEM so it doesn’t process more data than needed. Provide the coordinates in the following order, SNWE. Below is an example of the coordinates from my Lagos DEM. 
-
-
-
-
+For best results, I recommend also running gdal_info on your local DEM, and getting a coordinate list of the boundaries of your DEM so it doesn’t process more data than needed. Provide the coordinates in the following order, SNWE. An example of the coordinates from my Lagos DEM are pictured in the google doc. 
 
 I then add in the following region of interest and geocode bounding box so only the area covered by my DEM is processed. 
 Lagos DEM bounding: 6.0229007, 7.0312007, 3.0039348, 4.0172348 
 
 
-### 5. SAR granules list setup. It is possible to get these lists from a couple different sites, and to generate lists that do more than run sequentially. As an example, here’s the one I used for my setup
+### 5. SAR granules list setup. It is possible to get these lists from a couple different sites, and to generate lists that do more than run sequentially. As an example, here’s the one I used for my setup. I recommend looking at the google doc linked at the top for images of each section
 	Start at https://search.asf.alaska.edu/#/ 
 	
 	Select your geographic area of interest with dataset of Sentinel 1, File type L1 SLC, as pictured below
 	
 
-Once you find a frame and path that fits your area of interest, you can use the filters to only show this Frame+Path images. 
-
-
-
+Find a frame and path that fits your area of interest, you can use the filters to only show this Frame+Path images. 
 
 
 Search again with the path and frame in your filter, which should narrow down the list of images. Add all results to downloads, open downloads, and select the “Copy file IDs” option on the bottom. 
@@ -82,12 +76,6 @@ If you are running multiple secondary images with the same reference, you will n
 	Progress can be checked by using the sacct command. By following these instructions, an email will be sent when it finishes. 
 	The completed files will be placed wherever JOBDIR is set to, in the jobscript_5m_array.sh file.
 
-*Explanation of what the results are.. explain by naming convention.
+* Explanation of what the results are to come in the future.. Will be broken down by naming convention.
 
-Best of luck! If additional questions remain, feel free to email me.
-
-
-
-
-Sketch of file infrastructure, referenced earlier in instructions:
- 
+Best of luck! If additional questions remain, feel free to reach out.
