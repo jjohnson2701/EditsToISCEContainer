@@ -9,10 +9,10 @@ Notes here are based on my workflow and subject to future change and clarificati
 #### 1. Follow all the steps to download the ASF DOCKER from the RC Computing github: https://github.com/ResearchComputing/asf-insar-singularity
 
 ### 2. Copy the following files into your containers directory, which is created in the installation in step one. 
-*jobscript_5m_array.sh
-*arcgis_template.xml
-*topsApp_5m template.xml
-*SARimagelistexample.txt (You will need to make a reference list and a secondary list from this)
+* jobscript_5m_array.sh
+* arcgis_template.xml
+* topsApp_5m template.xml
+* SARimagelistexample.txt (You will need to make a reference list and a secondary list from this)
 
 ### 3. Edit jobscript_5m_array settings. Relevant ones to change are listed here in the order they appear:
  #SBATCH --ntasks sets the number of tasks per job. It is more efficient to run larger batched jobs with the least number of tasks possible, while still finishing the job under 24 hours.
