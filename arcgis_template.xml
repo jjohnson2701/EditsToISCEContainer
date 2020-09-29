@@ -1,0 +1,208 @@
+{% set date = now.strftime('%Y%m%d') %}
+{% set time = now.strftime('%H%M%S') %}
+{% set asf = "Alaska Satellite Facility" %}
+{% set acquisition_year = reference_granule[17:21] %}
+{% set dem_resolutions = {
+    "NED13": "10 meters",
+    "NED1": "30 meters",
+    "NED2": "60 meters",
+    "SRTMGL1": "30 meters",
+    "SRTMGL3": "90 meters",
+    "SRTM": "30 meters",
+    "WILLIS10": "10 meters",
+    "WILLIS2": "2 meters",
+} %}
+{% set dem_resolution = dem_resolutions[dem_name] %}
+{% set products = {
+    "AMP": {
+        "value": "amplitude",
+        "units": "in watts",
+    },
+    "COR": {
+        "value": "coherence",
+        "units": "from zero to one",
+    },
+    "UNW": {
+        "value": "unwrapped phase",
+        "units": "in radians",
+    },
+} %}
+{% set product = products[product_type] %}
+{% set contact_info %}
+  <cntAddress addressType="physical">
+    <delPoint>2156 Koyukuk Dr.</delPoint>
+    <city>Fairbanks</city>
+    <adminArea>Alaska</adminArea>
+    <postCode>99775-7320</postCode>
+    <eMailAdd>uso@asf.alaska.edu</eMailAdd>
+    <country>US</country>
+  </cntAddress>
+  <cntPhone>
+    <voiceNum tddtty="">907-474-5041</voiceNum>
+  </cntPhone>
+{% endset %}
+<metadata xml:lang="en">
+  <Esri>
+    <CreaDate>{{ date }}</CreaDate>
+    <CreaTime>{{ time }}</CreaTime>
+    <ArcGISFormat>1.0</ArcGISFormat>
+    <ArcGISstyle>North American Profile of ISO19115 2003</ArcGISstyle>
+    <SyncOnce>TRUE</SyncOnce>
+    <DataProperties>
+      <itemProps>
+        <imsContentType export="False">002</imsContentType>
+      </itemProps>
+    </DataProperties>
+    <ArcGISProfile>NAP</ArcGISProfile>
+    <ModDate>{{ date }}</ModDate>
+    <ModTime>{{ time }}</ModTime>
+  </Esri>
+  <dataIdInfo>
+    <idPurp>This file is the {{ product["value"] }} component of a Geocoded Unwrapped Interferogram of SLC SAR data from the Sentinel-1 mission, processed using the InSAR Scientific Computing Environment (ISCE). Cell values indicate {{ product["value"] }} {{ product["units"] }}, and pixel spacing is 30 meters.</idPurp>
+    <idAbs>This Geocoded Unwrapped Interferogram product is derived from a pair of Single Look Complex (SLC) granules of Synthetic Aperture Radar data from the Copernicus Sentinel-1 mission (European Space Agency), generated using the InSAR Scientific Computing Environment (ISCE) v2.3.1. It is projected to WGS 1984 latitude/longitude coordinates, and is corrected for terrain using a digital elevation model (DEM). The DEM used for this product is {{ dem_name }} (about {{ dem_resolution }} resolution).
+
+Processing Date/Time: {{ date }} {{ time }} UTC
+
+The granules used to generate this TIFF file are:
+
+Reference granule: {{ reference_granule }}
+
+Secondary granule: {{ secondary_granule }}
+
+For a detailed description of the Sentinel-1 file naming convention, refer to &lt;A href="https://www.asf.alaska.edu/sentinel/data/#naming"&gt;https://www.asf.alaska.edu/sentinel/data/#naming&lt;/A&gt;
+
+Cell values indicate {{ product["value"] }} {{ product["units"] }}, and pixel spacing is 30 meters. Images may appear mostly black when first displayed. Consider setting the layer symbology to Stretched - Standard Deviations (choose a number (n) that works best for your particular dataset; the ArcGIS default of n: 2.5 will improve the display, but other values may give a better visualization).
+
+The Sentinel-1A satellite was launched April 3, 2014, and the Sentinel-1B satellite was launched April 25, 2016. The satellites each have a 12-day repeat cycle. More information about the mission is available at &lt;A href="https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/sentinel-1"&gt;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/sentinel-1&lt;/A&gt;
+
+Additional information about Sentinel-1 data, imagery, tools and applications is available at &lt;A href="https://www.asf.alaska.edu/sentinel/"&gt;https://www.asf.alaska.edu/sentinel/&lt;/A&gt;
+    </idAbs>
+    <idCredit>ASF DAAC {{ now.strftime('%Y') }} using ISCE. Contains modified Copernicus Sentinel data {{ acquisition_year }}, processed by ESA.</idCredit>
+    <idCitation>
+      <date>
+        <pubDate>{{ now.strftime('%Y-%m-%dT%H:%M:%S') }}</pubDate>
+      </date>
+      <citRespParty>
+        <rpOrgName>{{ asf }}</rpOrgName>
+        <role>
+          <RoleCd value="007" />
+        </role>
+        <rpCntInfo>
+          {{ contact_info }}
+        </rpCntInfo>
+      </citRespParty>
+    </idCitation>
+    <searchKeys>
+      <keyword>{{ asf }}</keyword>
+      <keyword>ASF</keyword>
+      <keyword>Synthetic Aperture Radar</keyword>
+      <keyword>SAR</keyword>
+      <keyword>Interferometry</keyword>
+      <keyword>InSAR</keyword>
+      <keyword>Sentinel-1</keyword>
+    </searchKeys>
+    <dataLang>
+      <languageCode value="eng" />
+      <countryCode value="US" />
+    </dataLang>
+    <dataChar>
+      <CharSetCd value="004" />
+    </dataChar>
+    <idPoC>
+      <rpOrgName>{{ asf }}</rpOrgName>
+      <role>
+         <RoleCd value="010" />
+      </role>
+      <rpCntInfo>
+        {{ contact_info }}
+      </rpCntInfo>
+      <displayName>{{ asf }}</displayName>
+    </idPoC>
+    <resMaint>
+      <maintFreq>
+        <MaintFreqCd value="009" />
+      </maintFreq>
+      <maintCont>
+        <rpOrgName>{{ asf }}</rpOrgName>
+        <role>
+          <RoleCd value="002" />
+        </role>
+        <rpCntInfo>
+          {{ contact_info }}
+        </rpCntInfo>
+        <displayName>{{ asf }}</displayName>
+      </maintCont>
+    </resMaint>
+    <resConst>
+      <Consts>
+        <useLimit>There are no restrictions on the use of this data, but it must be cited as listed in the credits.</useLimit>
+      </Consts>
+    </resConst>
+    <envirDesc>This product was generated using ISCE release 2.3.1.</envirDesc>
+    <tpCat>
+      <TopicCatCd value="008" />
+    </tpCat>
+  </dataIdInfo>
+  <mdHrLv>
+   <ScopeCd value="005" />
+  </mdHrLv>
+  <mdLang>
+    <languageCode value="eng" />
+    <countryCode value="US" />
+  </mdLang>
+  <mdChar>
+    <CharSetCd value="004" />
+  </mdChar>
+  <mdDateSt>{{ date }}</mdDateSt>
+  <dataSetFn>
+    <OnFunctCd value="001" />
+  </dataSetFn>
+  <mdContact>
+    <rpOrgName>{{ asf }}</rpOrgName>
+    <role>
+      <RoleCd value="006" />
+    </role>
+    <rpCntInfo>
+      {{ contact_info }}
+    </rpCntInfo>
+    <displayName>{{ asf }}</displayName>
+  </mdContact>
+  <dqInfo>
+    <dqScope>
+      <scpLvl>
+        <ScopeCd value="005" />
+      </scpLvl>
+    </dqScope>
+  </dqInfo>
+  <mdMaint>
+    <maintFreq>
+      <MaintFreqCd value="009" />
+    </maintFreq>
+  </mdMaint>
+  <contInfo>
+    <ImgDesc>
+      <attDesc>{{ product["value"] }} {{ product["units"] }}</attDesc>
+      <trianInd>False</trianInd>
+      <radCalDatAv>False</radCalDatAv>
+      <camCalInAv>False</camCalInAv>
+      <filmDistInAv>False</filmDistInAv>
+      <lensDistInAv>False</lensDistInAv>
+      <contentTyp>
+        <ContentTypCd value="001" />
+      </contentTyp>
+      <covDim>
+        <Band>
+          <seqID>
+            <aName>C-band</aName>
+            <attributeType>
+              <aName>SAR</aName>
+            </attributeType>
+          </seqID>
+        </Band>
+      </covDim>
+    </ImgDesc>
+  </contInfo>
+  <refSysInfo>
+    <RefSystem dimension="horizontal" />
+  </refSysInfo>
+</metadata>
