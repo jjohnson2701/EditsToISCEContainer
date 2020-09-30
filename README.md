@@ -32,7 +32,7 @@ SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
 Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
 ### 4. DEM setup: 
-The DOCKER wants a dem in  “dem.envi” format, and I have not changed. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
+The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
 ($ gdal_translate -of envi smaller_10m.tif mumbai10m.envi)
 
 Create an .xml file for the DEM. The automated gdal creation with the previous command is .aux.xml, which is not what you need. Use gdal2isce_xml.py, which creates an envi.xml file for you. 
