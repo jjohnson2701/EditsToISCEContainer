@@ -32,11 +32,27 @@ SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
 Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
 ### 4. DEM setup: 
-The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
+These instructions require having gdal, an open source software to both read and in some cases convert DEM's. The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. These instructions assume that you have access to your own DEM for processing. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
 ($ gdal_translate -of envi smaller_10m.tif mumbai10m.envi)
 
-Create an .xml file for the DEM. The automated gdal creation with the previous command is .aux.xml, which is not what you need. Use gdal2isce_xml.py, which creates an envi.xml file for you. 
-($ gdal2isce_xml.py -i mumbai10m.envi)
+For SRTM pixel convention:
+Use the gdalinfo output information (from the fields on the left) to edit the provided dem xml file (fields on the right) to match your DEM.
+$gdalinfo mumbai10m.envi
+
+Component Name - Property Name : gdalinfo output
+
+coordinate1 - delta : Pixel Size [0]
+coordinate1 - starting value* : Origin [0]
+coordinate1 - size : Size [0]
+coordinate2 - delta : Pixel Size [1]
+coordinate2 - starting value* : Origin [1]
+coordinate2 - size : Size [1]
+length : Size [1]
+width : Size [0]
+FIRST_LONGITUDE : Origin [0]
+DELTA_LATITUDE : Pixel Size [1]
+FIRST_LATITUDE - Origin [1]
+
 
 Copy both the DEM and the of these files into summit, in a directory you specify to the container in the following step. The example has my path, which follows the infrastructure displayed at the bottom. 
 
