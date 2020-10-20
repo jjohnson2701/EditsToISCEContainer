@@ -39,24 +39,24 @@ For SRTM pixel convention:
 Use the gdalinfo output information (from the fields on the left) to edit the provided dem xml file (fields on the right) to match your DEM.
 $gdalinfo mumbai10m.envi
 
-Component Name - Property Name : gdalinfo output
-
-coordinate1 - delta : Pixel Size [0]
-coordinate1 - starting value* : Origin [0]
-coordinate1 - size : Size [0]
-coordinate2 - delta : Pixel Size [1]
-coordinate2 - starting value* : Origin [1]
-coordinate2 - size : Size [1]
-length : Size [1]
-width : Size [0]
-FIRST_LONGITUDE : Origin [0]
-DELTA_LATITUDE : Pixel Size [1]
-FIRST_LATITUDE - Origin [1]
+Component Name | | gdalinfo output
+--- | --- | --- |
+coordinate1 - delta |  | Pixel Size [0]
+coordinate1 - starting value* | | Origin [0]
+coordinate1 - size | | Size [0]
+coordinate2 - delta | | Pixel Size [1]
+coordinate2 - starting value* | | Origin [1]
+coordinate2 - size| | Size [1]
+length | | Size [1]
+width | | Size [0]
+FIRST_LONGITUDE | | Origin [0]
+DELTA_LATITUDE | | Pixel Size [1]
+FIRST_LATITUDE | | Origin [1]
 
 
 Copy both the DEM and the of these files into summit, in a directory you specify to the container in the following step. The example has my path, which follows the infrastructure displayed at the bottom. 
 
-* In the future I will have instructions on how to make this transfer. Easiest way for large transfers is globus connect. 
+* In the future I will have instructions on how to make this transfer. Easiest way for large transfers is globus connect, instructions here https://curc.readthedocs.io/en/latest/compute/data-transfer.html. 
 
 Rename both the dem and the associated xml file as dem.envi and dem.envi.xml so they work with the docker seamlessly
 
