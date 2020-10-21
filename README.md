@@ -53,6 +53,8 @@ FIRST_LONGITUDE | | Origin [0]
 DELTA_LATITUDE | | Pixel Size [1]
 FIRST_LATITUDE | | Origin [1]
 
+Finally, edit the file_name in the dem.xml file to match its final location on Summit
+
 
 Copy both the DEM and the of these files into summit, in a directory you specify to the container in the following step. The example has my path, which follows the infrastructure displayed at the bottom. 
 
