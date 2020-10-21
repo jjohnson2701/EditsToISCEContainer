@@ -72,6 +72,10 @@ For best results, I recommend also running gdal_info on your local DEM, and gett
 I then add in the following region of interest and geocode bounding box so only the area covered by my DEM is processed. 
 Lagos DEM bounding: 6.0229007, 7.0312007, 3.0039348, 4.0172348 
 
+Then open jobscript_5m_array.sh, 
+Edit the "export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/dem.envi" to wherever your DEM is stored
+
+
 
 ### 5. SAR granules list setup. It is possible to get these lists from a couple different sites, and to generate lists that do more than run sequentially. As an example, here’s the one I used for my setup. I recommend looking at the google doc linked at the top for images of each section
 	Start at https://search.asf.alaska.edu/#/ 
