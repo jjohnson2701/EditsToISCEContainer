@@ -27,7 +27,7 @@ module purge
 module load singularity/3.3.0
 
 # location of the DEM to pass to insar_5m.py
-export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/dem.envi
+export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/
 
 #Extract names of granules for given array ID
 REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosRef5.txt)
