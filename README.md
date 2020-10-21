@@ -24,9 +24,10 @@ Notes here are based on my workflow and subject to future change and clarificati
 
 SARimagelistexample.txt is set to a text file list of SLC images to process sequentially.
 
-#Extract names of granules for given array ID. You will need to make a list pairs, or in this case a reference secondary image list. More on this in step 5. My naming convention has the path, frame, and other info included. 
+#Extract names of granules for given array ID. You will need to make a list pairs, or in this case a reference secondary image list. My naming convention has the path, frame, and other info included. The code below will match each reference granule with the following image. Edits can be made to run one reference image against several secondaries. More on this in step 5.
 
 REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosP1F16Asc.txt)
+
 SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 	
 
@@ -90,14 +91,14 @@ Find a frame and path that fits your area of interest, you can use the filters t
 Search again with the path and frame in your filter, which should narrow down the list of images. Add all results to downloads, open downloads, and select the “Copy file IDs” option on the bottom. 
 
 
-Save this SLC list in a text file to the same containers directory, and double check that it matches the name given to the variable SLC_LIST in jobscript_10m_array.sh. If you are simply pairing each with the consecutive image, you can use the following format to pair them. 
+Save this SLC list in a text file to the same containers directory, and double check that it matches the name given to the variable SLC_LIST in jobscript_10m_array.sh. If you are simply pairing each with the consecutive image, you can use the provided example format.
 
-If you are running multiple secondary images with the same reference, you will need to generate a list. I hope to provide a script to generate these in the future.
+If you are running multiple secondary images with the same reference, you will need to generate a list. I hope to provide a script to generate these in the future. At the moment, you can use the provided LagosP1RefSample.txt and LagosP1SecSample.txt as an example
 
 
 ### 6. Submit the job to SUMMIT using the following command: $ sbatch jobscript_5m_array.sh
-	Progress can be checked by using the sacct command. By following these instructions, an email will be sent when it finishes. 
-	The completed files will be placed wherever JOBDIR is set to, in the jobscript_5m_array.sh file.
+Progress can be checked by using the sacct command. By following these instructions, an email will be sent when it finishes. 
+The completed files will be placed wherever JOBDIR is set to, in the jobscript_5m_array.sh file.
 
 * Explanation of what the results are to come in the future.. Will be broken down by naming convention.
 
