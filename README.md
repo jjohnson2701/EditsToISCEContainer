@@ -10,7 +10,8 @@ Notes here are based on my workflow and subject to future change and clarificati
 
 ### 2. Copy the following files into your containers directory, which is created in the installation in step one. 
 * jobscript_5m_array.sh
-* arcgis_template.xml
+* arcgis_template.xml -no edits are needed in this file
+* insar_5m.py -no edits needed to this file either
 * topsApp_5m template.xml
 * LagosP1F16Asc.txt (You will need to make a reference list and a secondary list from this)
 
