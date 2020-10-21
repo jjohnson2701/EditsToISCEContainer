@@ -290,8 +290,8 @@ if __name__ == "__main__":
     validate_granules(reference_granule, secondary_granule)
 
     dem_filename, dem_name = get_dem(args.dem, reference_granule["bbox"])
-    shutil.copy(DEM_LOCATION, "./")
-    shutil.copy(DEM_LOCATION +".xml", "./")
+    shutil.copy(DEM_LOCATION+"dem.envi", "./")
+    shutil.copy(DEM_LOCATION +"dem.envi.xml", "./")
     get_granule(reference_granule["download_url"])
     get_granule(secondary_granule["download_url"])
 
