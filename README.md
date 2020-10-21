@@ -19,7 +19,7 @@ Notes here are based on my workflow and subject to future change and clarificati
  
 #SBATCH --mail-user input for the email address of the user, which receives an alert when the job finishes running
 
-#SBATCH --array declares which of the array elements to run, up to 1000 pairs in parallel. This is based off of a text file that lists SAR images to be downloaded from ASF. The provided example has a list of images over Mumbai, with path 34, Frame 527, descending view. 
+#SBATCH --array declares which of the array elements to run, up to 1000 pairs in parallel. This is based off of a text file that lists SAR images to be downloaded from ASF. The provided example has a list of images over Lagos, with path 1, Frame 16, ascending view. 
 
 SARimagelistexample.txt is set to a text file list of SLC images to process sequentially.
 
@@ -33,11 +33,11 @@ JOBDIR can also be changed according to your file structure. A quick sketch of m
 Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
 ### 4. DEM setup: 
 These instructions require having gdal, an open source software to both read and in some cases convert DEM's. The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. These instructions assume that you have access to your own DEM for processing. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
-($ gdal_translate -of envi smaller_10m.tif mumbai10m.envi)
+($ gdal_translate -of envi smaller_10m.tif lagos10m.envi)
 
 For SRTM pixel convention:
 Use the gdalinfo output information (from the fields on the left) to edit the provided dem xml file (fields on the right) to match your DEM.
-$gdalinfo mumbai10m.envi
+$gdalinfo lagos10m.envi
 
 Component Name | | gdalinfo output
 --- | --- | --- |
