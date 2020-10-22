@@ -80,9 +80,9 @@ Edit the "export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/dem.envi" to wher
 
 
 ### 5. SAR granules list setup. It is possible to get these lists from a couple different sites, and to generate lists that do more than run sequentially. As an example, here’s the one I used for my setup. I recommend looking at the google doc linked at the top for images of each section
-	Start at https://search.asf.alaska.edu/#/ 
+Start at https://search.asf.alaska.edu/#/ 
 	
-	Select your geographic area of interest with dataset of Sentinel 1, File type L1 SLC, as pictured below
+Select your geographic area of interest with dataset of Sentinel 1, File type L1 SLC, as pictured below
 	
 
 Find a frame and path that fits your area of interest, you can use the filters to only show this Frame+Path images. 
@@ -93,8 +93,10 @@ Search again with the path and frame in your filter, which should narrow down th
 
 Save this SLC list in a text file to the same containers directory, and double check that it matches the name given to the variable SLC_LIST in jobscript_10m_array.sh. If you are simply pairing each with the consecutive image, you can use the provided example format.
 
-If you are running multiple secondary images with the same reference, you will need to generate a list. I hope to provide a script to generate these in the future. At the moment, you can use the provided LagosP1RefSample.txt and LagosP1SecSample.txt as an example
-
+If you are running multiple secondary images with the same reference, you will need to generate a list. I hope to provide a script to generate these in the future. At the moment, you can use the provided LagosP1RefSample.txt and LagosP1SecSample.txt as an example. To do so, you would change REF_GRANULE and SEC_GRANULE in jobscript_5m
+	
+	REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosP1RefSample.txt)
+	SND_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosP1SecSample.txt)
 
 ### 6. Submit the job to SUMMIT using the following command: $ sbatch jobscript_5m_array.sh
 Progress can be checked by using the sacct command. By following these instructions, an email will be sent when it finishes. 
