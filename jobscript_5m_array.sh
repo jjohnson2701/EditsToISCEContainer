@@ -24,6 +24,7 @@
 module purge
 
 # load any modules needed to run your program
+unset LD_LIBRARY_PATH
 module load singularity/3.3.0
 
 # location of the DEM to pass to insar_5m.py
