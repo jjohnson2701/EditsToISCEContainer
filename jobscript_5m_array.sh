@@ -25,7 +25,7 @@ module purge
 
 # load any modules needed to run your program
 unset LD_LIBRARY_PATH
-module load singularity/3.3.0
+module load singularity/3.6.4
 
 # location of the DEM to pass to insar_5m.py
 export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/
@@ -45,7 +45,7 @@ cp /projects/jojo8550/containers/topsApp_template5m.xml topsApp_template.xml
 cp /projects/jojo8550/containers/insar_5m.py insar.py
 
 #singularity exec --bind ${PWD}:/output --bind ./applications:/opt/isce2.3/applications /projects/jojo8550/containers/apt-insar.sif python3 -u insar.py \
-singularity exec --bind ${PWD}:/output /projects/jojo8550/containers/apt-insar.sif python3 -u insar.py \
+singularity exec --bind ${PWD}:/output --bind /scratch/summit /projects/jojo8550/containers/apt-insar.sif python3 -u insar.py \
  --reference-granule $REF_GRANULE \
  --secondary-granule $SND_GRANULE \
  --username jojohnson --password summitS3tuo
