@@ -10,17 +10,17 @@ Notes here are based on my workflow and subject to future change and clarificati
 
 ### 2. Copy the following files into your containers directory, which is created in the installation in step one. 
 * jobscript_5m_array.sh
-* arcgis_template.xml -no edits are needed in this file
-* insar_5m.py -no edits needed to this file either
+* arcgis_template.xml -no edits are needed
+* insar_5m.py -no edits needed 
 * topsApp_5m template.xml
-* LagosP1F16Asc.txt (You will need to make a reference list and a secondary list from this)
+* LagosP1F16Asc.txt -Provided as an example of an input file
 
 ### 3. Edit jobscript_5m_array settings. Relevant ones to change are listed here in the order they appear:
  #SBATCH --ntasks sets the number of tasks per job. It is more efficient to run larger batched jobs with the least number of tasks possible, while still finishing the job under 24 hours.
  
-#SBATCH --mail-user input for the email address of the user, which receives an alert when the job finishes running
+#SBATCH --mail-user input for the email address of the user, which receives an alert when the job finishes. Change this to your own email
 
-#SBATCH --array declares which of the array elements to run, up to 1000 pairs in parallel. This is based off of a text file that lists SAR images to be downloaded from ASF. The provided example has a list of images over Lagos, with path 1, Frame 16, ascending view. 
+#SBATCH --array declares which of the array elements to run, up to 1000 pairs in parallel. This command  is based off of a text file that lists SAR images to be downloaded from ASF. The provided example has a list of images over Lagos, with path 1, Frame 16, ascending view. 
 
 SARimagelistexample.txt is set to a text file list of SLC images to process sequentially.
 
