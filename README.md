@@ -38,9 +38,8 @@ These instructions require having gdal, an open source software to both read and
 ($ gdal_translate -of envi smaller_10m.tif lagos10m.envi)
 
 For SRTM pixel convention:
-Now that the DEM is set up, edit the following fields in demeexample.envi.xml according to the output from calling gdalinfo on the newly created DEM. then rename the demexample.envi.xml to match your file.
+Now that the DEM is set up, edit the following fields in demeexample.envi.xml according to the output from calling gdalinfo on the newly created DEM. then rename the demexample.envi.xml to match your dem.
 $gdalinfo lagos10m.envi
-$mv demexample.envi.xml lagos10m.envi.xml
 
 Component Name (in .xml file) | | gdalinfo output
 --- | --- | --- |
