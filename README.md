@@ -34,14 +34,15 @@ SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
 Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
 ### 4. DEM setup: 
-These instructions require having gdal, an open source software to both read and in some cases convert DEM's. The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. These instructions assume that you have access to your own DEM for processing. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
+These instructions require having gdal, an open source software to both read and in some cases convert DEM's. The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. These instructions also assume that you have access to your own DEM for processing. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
 ($ gdal_translate -of envi smaller_10m.tif lagos10m.envi)
 
 For SRTM pixel convention:
-Use the gdalinfo output information (from the fields on the left) to edit the provided dem xml file (fields on the right) to match your DEM.
+Now that the DEM is set up, edit the following fields in demeexample.envi.xml according to the output from calling gdalinfo on the newly created DEM. then rename the demexample.envi.xml to match your file.
 $gdalinfo lagos10m.envi
+$mv demexample.envi.xml lagos10m.envi.xml
 
-Component Name | | gdalinfo output
+Component Name (in .xml file) | | gdalinfo output
 --- | --- | --- |
 coordinate1 - delta |  | Pixel Size [0]
 coordinate1 - starting value* | | Origin [0]
