@@ -34,12 +34,22 @@ SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
 Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
 ### 4. DEM setup: 
-These instructions require having gdal, an open source software to both read and in some cases convert DEM's. The DOCKER wants a dem in  “dem.envi” format, and SRTM pixel convention. These instructions also assume that you have access to your own DEM for processing. Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
+The DOCKER wants a dem named “dem.envi” with SRTM pixel convention. These instructions assume that you have access to a DEM for processing. If you are happy with a standard DEM, you can skip this step.
+
+Convert the DEM (in my case, .tif files that came with geoid removed) to .envi using gdal_translate.
 ($ gdal_translate -of envi smaller_10m.tif lagos10m.envi)
+
+Rename the DEM to dem.envi, so the metadata files are consistent. 
+($ mv lagos10m.envi dem.envi)
+
+If ISCE is installed on your machine, you can convert and prep the DEM using gdal2isce_xml.py. It will generate an .xml and .vrt file automatically. If you do this, the final DEM step is to edit dem.envi.xml and change <property name="file_name"> to the location dem.envi will be stored on Summit.
+($ gdal2isce_xml.py -i dem.envi)
+
+Below are workaround instructions if ISCE is not installed
 
 For SRTM pixel convention:
 Now that the DEM is set up, edit the following fields in demeexample.envi.xml according to the output from calling gdalinfo on the newly created DEM. then rename the demexample.envi.xml to match your dem.
-$gdalinfo lagos10m.envi
+$gdalinfo dem.envi
 
 Component Name (in .xml file) | | gdalinfo output
 --- | --- | --- |
@@ -55,27 +65,28 @@ FIRST_LONGITUDE | | Origin [0]
 DELTA_LATITUDE | | Pixel Size [1]
 FIRST_LATITUDE | | Origin [1]
 
-Finally, edit the file_name in the dem.xml file to match its final location on Summit
+Edit the <property name="file_name"> in the dem.xml file to match the location dem.envi will be stored on Summit
 
+Generate a .vrt file to complete the necessary files for processing
+($ gdalbuildvrt dem.envi.vrt dem.envi)
 
-Copy both the DEM and the of these files into summit, in a directory you specify to the container in the following step. The example has my path, which follows the infrastructure displayed at the bottom. 
+Copy dem.envi, dem.envi.xml, and dem.envi.vrt to Summit, in a directory you specified in the previous step. The example has my path, which follows the infrastructure displayed at the bottom. 
 
 * In the future I will have instructions on how to make this transfer. Easiest way for large transfers is globus connect, instructions here https://curc.readthedocs.io/en/latest/compute/data-transfer.html. 
 
-Rename both the dem and the associated xml file as dem.envi and dem.envi.xml so they work with the docker seamlessly
 
 #### DEM setup part B: 
 open topsApp_template5m.xml.
 
-Edit the <property name=”dem filename”> path to match wherever you store your DEM on summit. 
+Edit the <property name=”dem filename”> path to match the stored DEM on Summit. 
 
-For best results, I recommend also running gdal_info on your local DEM, and getting a coordinate list of the boundaries of your DEM so it doesn’t process more data than needed. Provide the coordinates in the following order, SNWE. An example of the coordinates from my Lagos DEM are pictured in the google doc. 
+Run gdal_info on your DEM, and make note of the corner coordinates in the output. Fill in the coordinates of the entire DEM in the "region of interest" and "geocode bounding box", or a smaller subset in SNWE order.
+example: 
+<property name="region of interest">[6.0229007, 7.0312007, 3.0039348, 4.0172348]</property>
+<property name="geocode bounding box">[6.0229007, 7.0312007, 3.0039348, 4.0172348]</property>
 
-I then add in the following region of interest and geocode bounding box so only the area covered by my DEM is processed. 
-Lagos DEM bounding: 6.0229007, 7.0312007, 3.0039348, 4.0172348 
-
-Then open jobscript_5m_array.sh, 
-Edit the "export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/dem.envi" to wherever your DEM is stored
+Finally, open jobscript_5m_array.sh
+Edit the "export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/" to wherever your DEM is stored
 
 
 
