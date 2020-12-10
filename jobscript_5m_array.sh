@@ -34,8 +34,9 @@ export DEM_LOCATION=/projects/jojo8550/dems/Lagos/5m/
 REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosRef5.txt)
 SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosSec5.txt)
 
-# The directory where you want the job to run. Edited for naming
-JOBDIR=/scratch/summit/$USER/Lagos/5m/${REF_GRANULE}/${SND_GRANULE}
+# The directory where you want the job to run. Edited to follow expected input convention for time series creation with STARTDATE_ENDDATE
+JOBDIR=/scratch/summit/$USER/Lagos/5m/${REF_GRANULE:17:8}_${SND_GRANULE:17:8}
+
 export JOBDIR
 mkdir -p $JOBDIR
 cd $JOBDIR
