@@ -58,8 +58,13 @@
     <ModTime>{{ time }}</ModTime>
   </Esri>
   <dataIdInfo>
-    <idPurp>This file is the {{ product["value"] }} component of a Geocoded Unwrapped Interferogram of SLC SAR data from the Sentinel-1 mission, processed using the InSAR Scientific Computing Environment (ISCE). Cell values indicate {{ product["value"] }} {{ product["units"] }}, and pixel spacing is 30 meters.</idPurp>
-    <idAbs>This Geocoded Unwrapped Interferogram product is derived from a pair of Single Look Complex (SLC) granules of Synthetic Aperture Radar data from the Copernicus Sentinel-1 mission (European Space Agency), generated using the InSAR Scientific Computing Environment (ISCE) v2.3.1. It is projected to WGS 1984 latitude/longitude coordinates, and is corrected for terrain using a digital elevation model (DEM). The DEM used for this product is {{ dem_name }} (about {{ dem_resolution }} resolution).
+    <idPurp>This file is the {{ product["value"] }} component of a Geocoded Unwrapped Interferogram of SLC SAR data from the Sentinel
+-1 mission, processed using the InSAR Scientific Computing Environment (ISCE). Cell values indicate {{ product["value"] }} {{ product
+["units"] }}, and pixel spacing is 30 meters.</idPurp>
+    <idAbs>This Geocoded Unwrapped Interferogram product is derived from a pair of Single Look Complex (SLC) granules of Synthetic Ap
+erture Radar data from the Copernicus Sentinel-1 mission (European Space Agency), generated using the InSAR Scientific Computing Envi
+ronment (ISCE) v2.3.1. It is projected to WGS 1984 latitude/longitude coordinates, and is corrected for terrain using a digital eleva
+tion model (DEM). The DEM used for this product is {{ dem_name }} (about {{ dem_resolution }} resolution).
 
 Processing Date/Time: {{ date }} {{ time }} UTC
 
@@ -69,15 +74,22 @@ Reference granule: {{ reference_granule }}
 
 Secondary granule: {{ secondary_granule }}
 
-For a detailed description of the Sentinel-1 file naming convention, refer to &lt;A href="https://www.asf.alaska.edu/sentinel/data/#naming"&gt;https://www.asf.alaska.edu/sentinel/data/#naming&lt;/A&gt;
+For a detailed description of the Sentinel-1 file naming convention, refer to &lt;A href="https://www.asf.alaska.edu/sentinel/data/#n
+aming"&gt;https://www.asf.alaska.edu/sentinel/data/#naming&lt;/A&gt;
 
-Cell values indicate {{ product["value"] }} {{ product["units"] }}, and pixel spacing is 30 meters. Images may appear mostly black when first displayed. Consider setting the layer symbology to Stretched - Standard Deviations (choose a number (n) that works best for your particular dataset; the ArcGIS default of n: 2.5 will improve the display, but other values may give a better visualization).
+Cell values indicate {{ product["value"] }} {{ product["units"] }}, and pixel spacing is 30 meters. Images may appear mostly black wh
+en first displayed. Consider setting the layer symbology to Stretched - Standard Deviations (choose a number (n) that works best for 
+your particular dataset; the ArcGIS default of n: 2.5 will improve the display, but other values may give a better visualization).
 
-The Sentinel-1A satellite was launched April 3, 2014, and the Sentinel-1B satellite was launched April 25, 2016. The satellites each have a 12-day repeat cycle. More information about the mission is available at &lt;A href="https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/sentinel-1"&gt;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/sentinel-1&lt;/A&gt;
+The Sentinel-1A satellite was launched April 3, 2014, and the Sentinel-1B satellite was launched April 25, 2016. The satellites each 
+have a 12-day repeat cycle. More information about the mission is available at &lt;A href="https://earth.esa.int/web/guest/missions/e
+sa-operational-eo-missions/sentinel-1"&gt;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/sentinel-1&lt;/A&gt;
 
-Additional information about Sentinel-1 data, imagery, tools and applications is available at &lt;A href="https://www.asf.alaska.edu/sentinel/"&gt;https://www.asf.alaska.edu/sentinel/&lt;/A&gt;
+Additional information about Sentinel-1 data, imagery, tools and applications is available at &lt;A href="https://www.asf.alaska.edu/
+sentinel/"&gt;https://www.asf.alaska.edu/sentinel/&lt;/A&gt;
     </idAbs>
-    <idCredit>ASF DAAC {{ now.strftime('%Y') }} using ISCE. Contains modified Copernicus Sentinel data {{ acquisition_year }}, processed by ESA.</idCredit>
+    <idCredit>ASF DAAC {{ now.strftime('%Y') }} using ISCE. Contains modified Copernicus Sentinel data {{ acquisition_year }}, proces
+sed by ESA.</idCredit>
     <idCitation>
       <date>
         <pubDate>{{ now.strftime('%Y-%m-%dT%H:%M:%S') }}</pubDate>
