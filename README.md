@@ -9,9 +9,9 @@ Notes here are based on my workflow and subject to future change and clarificati
 #### 1. Follow all the steps to download the ASF DOCKER from the RC Computing github: https://github.com/ResearchComputing/asf-insar-singularity
 
 ### 2. Copy the following files into your containers directory, which is created in the installation in step one. 
-* jobscript_5m_array.sh
+* jobscript_array.sh
 * arcgis_template.xml -no edits are needed
-* insar_5m.py -no edits needed 
+* insar.py -no edits needed 
 * topsApp_5m template.xml
 * LagosP1F16Asc.txt -Provided as an example of an input file
 
