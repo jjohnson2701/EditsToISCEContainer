@@ -1,25 +1,42 @@
+#!/usr/bin/env python3
 
+import numpy as np
 import os
 import subprocess
+import re
+import requests
+import shutil
+import datetime
+
+from shutil import rmtree
 from argparse import ArgumentParser
 from zipfile import ZipFile
 from getpass import getpass
-import shutil
-from shutil import rmtree
-import datetime
-
-import requests
+from html.parser import HTMLParser
 from jinja2 import Template
 from get_dem import get_ISCE_dem
 from shapely.geometry import Polygon
 
-# added in to load local DEM here instead of in code. Edit line below
+# added in to load local DEM here instead of in ode. Edit line below
 DEM_LOCATION = os.environ["DEM_LOCATION"]
 
 
 CHUNK_SIZE = 5242880
 CMR_URL = "https://cmr.earthdata.nasa.gov/search/granules.umm_json"
-QC_URL = "https://qc.sentinel1.eo.esa.int/api/v1/"
+QC_URL = "https://scihub.copernicus.eu/gnss/"
+
+#Generic credentials to query and download orbit files
+credentials = ('gnssguest', 'gnssguest')
+
+orbitMap = [('precise', 'AUX_POEORB'),
+            ('restituted', 'AUX_RESORB')]
+
+datefmt = "%Y%m%dT%H%M%S"
+queryfmt = "%Y-%m-%d"
+queryfmt2 = "%Y/%m/%d/"
+
+outdir = './'
+
 COLLECTION_IDS = [
     "C1214470488-ASF",  # SENTINEL-1A_SLC
     "C1327985661-ASF",  # SENTINEL-1B_SLC
@@ -82,6 +99,7 @@ def generate_output_files(reference_granule, secondary_granule, dem_name, input_
     create_geotiff(f"{input_folder}/phsig.cor.geo", f"{output_folder}/{name}-COR.tif")
     write_output_xml(reference_granule, secondary_granule, "COR", f"{output_folder}/{name}-COR.tif.xml", dem_name)
     create_geotiff(f"{input_folder}/filt_topophase.unw.geo", f"{output_folder}/{name}-AMP.tif", input_band=1)
+
     write_output_xml(reference_granule, secondary_granule, "AMP", f"{output_folder}/{name}-AMP.tif.xml", dem_name)
     create_geotiff(f"{input_folder}/filt_topophase.unw.geo", f"{output_folder}/{name}-UNW.tif", input_band=2)
     write_output_xml(reference_granule, secondary_granule, "UNW", f"{output_folder}/{name}-UNW.tif.xml", dem_name)
@@ -128,21 +146,134 @@ def get_orbit_url(granule, orbit_type):
         "page_size": "1",
     }
 
-    response = requests.get(url=QC_URL, params=params)
+    response = requests.get(QC_URL, params=params, auth=credentials)
     response.raise_for_status()
     qc_data = response.json()
 
     orbit_url = None
     if qc_data["results"]:
         orbit_url = qc_data["results"][0]["remote_url"]
+    print('Orbit URL: ', orbit_url)
     return orbit_url
 
 
+def fileToRange(fname):
+    '''
+    Derive datetime range from orbit file name.
+    '''
+
+    fields = os.path.basename(fname).split('_')
+    start = datetime.datetime.strptime(fields[-2][1:16], datefmt)
+    stop = datetime.datetime.strptime(fields[-1][:15], datefmt)
+    mission = fields[0]
+
+    return (start, stop, mission)
+
+def FileToTimeStamp(safename):
+    '''
+    Return timestamp from SAFE name.
+    '''
+    safename = os.path.basename(safename)
+    fields = safename.split('_')
+    sstamp = []  # sstamp for getting SAFE file start time, not needed for orbit file timestamps
+
+    sstamp = datetime.datetime.strptime(fields[-5], datefmt)
+    p = re.compile(r'(?<=_)\d{8}')
+    dt2 = p.search(safename).group()
+    tstamp = datetime.datetime.strptime(dt2, '%Y%m%d')
+
+    satName = fields[0]
+
+    return tstamp, satName, sstamp
+
+
+class MyHTMLParser(HTMLParser):
+
+    def __init__(self,url):
+        HTMLParser.__init__(self)
+        self.fileList = []
+        self._url = url
+        
+    def handle_starttag(self, tag, attrs):
+        for name, val in attrs:
+            if name == 'href':
+                if val.startswith("https://scihub.copernicus.eu/gnss/odata") and val.endswith(")/"):
+                    pass
+                else:
+                    downloadLink = val.strip()
+                    downloadLink = downloadLink.split("/Products('Quicklook')")
+                    downloadLink = downloadLink[0] + downloadLink[-1]
+                    self._url = downloadLink
+                
+    def handle_data(self, data):
+        if data.startswith("S1") and data.endswith(".EOF"):
+            self.fileList.append((self._url, data.strip()))
+
+
 def get_orbit_file(granule):
-    orbit_url = get_orbit_url(granule, "AUX_POEORB")
-    if not orbit_url:
-        orbit_url = get_orbit_url(granule, "AUX_RESORB")
-    orbit_file = download_file(orbit_url)
+
+    print('granule=',granule)
+
+    fileTS, satName, fileTSStart = FileToTimeStamp(granule)
+ 
+    print('fileTSStart=',fileTSStart)
+    print('fileTS=',fileTS)
+    tstamp = fileTS
+    print('filename=',fileTS)
+    print('Reference time: ', fileTS)
+    print('Satellite name: ', satName)
+    match = None
+    session = requests.Session()
+
+    for spec in orbitMap:
+        oType = spec[0]
+        delta = datetime.timedelta(days=1)
+        print('delta=', delta)        
+        timebef = (fileTS - delta).strftime(queryfmt)
+        timeaft = (fileTS + delta).strftime(queryfmt)
+#        timebef = `date -d "$fileTS -delta"`
+#        timeaft = `date -d "$fileTS +delta"`
+        print('timebef=',timebef)
+        print('timeaft=',timeaft)
+        url = QC_URL + 'search?q=( beginPosition:[{0}T00:00:00.000Z TO {1}T23:59:59.999Z] AND endPosition:[{0}T00:00:00.000Z TO {1}T23:59:59.999Z] ) AND ( (platformname:Sentinel-1 AND filename:{2}_* AND producttype:{3}))&start=0&rows=100'.format(timebef,timeaft, satName,spec[1])
+        
+        print('url=',url)
+
+        success = False
+        match = None
+  
+        try:
+            r = session.get(url, verify=True, auth=credentials)
+            r.raise_for_status()
+            parser = MyHTMLParser(url)
+            parser.feed(r.text)
+            for resulturl, result in parser.fileList:
+                tbef, taft, mission = fileToRange(os.path.basename(result))
+                if (tbef <= fileTSStart) and (taft >= fileTS):
+                    matchFileName = result
+                    orbit_file = result
+                    match = resulturl
+
+            if match is not None:
+                success = True
+        except:
+            pass
+
+        if success:
+            break
+    
+    print(f"\n{match}")
+    print(f"\n{orbit_file}")
+    print(f"\n{outdir}")
+
+    if match is not None:
+        output = os.path.join(outdir, matchFileName)
+        res = download_orbit_file(match, output, session)
+        if res is False:
+            print('Failed to download URL: ', match)
+    else:
+        print('Failed to find {1} orbits for tref {0}'.format(fileTS, satName))
+
     return orbit_file
 
 
@@ -167,6 +298,30 @@ def download_file(url):
                 if chunk:
                     f.write(chunk)
     return local_filename
+
+
+def download_orbit_file(url, outdir='.', session=None):
+    if session is None:
+        session = requests.session()
+
+    path = outdir
+    print('Downloading URL: ', url)
+    request = session.get(url, stream=True, verify=True, auth=credentials)
+
+    try:
+        val = request.raise_for_status()
+        success = True
+    except:
+        success = False
+
+    if success:
+        with open(path, 'wb') as f:
+            for chunk in request.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+                    f.flush()
+
+    return success
 
 
 def get_attribute(entry, attribute_name):
@@ -262,7 +417,6 @@ def write_netrc_file(username, password):
     with open(netrc_file, "w") as f:
         f.write(f"machine urs.earthdata.nasa.gov login {username} password {password}")
 
-
 def get_args():
     parser = ArgumentParser(description="Sentinel-1 InSAR using ISCE")
     parser.add_argument("--reference-granule", "-r", type=str, help="Reference granule name.", required=True)
@@ -281,17 +435,23 @@ def get_args():
     return args
 
 
+
 if __name__ == "__main__":
     args = get_args()
     write_netrc_file(args.username, args.password)
 
     reference_granule = get_metadata(args.reference_granule)
     secondary_granule = get_metadata(args.secondary_granule)
+
     validate_granules(reference_granule, secondary_granule)
 
-    dem_filename, dem_name = get_dem(args.dem, reference_granule["bbox"])
-    shutil.copy(DEM_LOCATION+"dem.envi", "./")
-    shutil.copy(DEM_LOCATION +"dem.envi.xml", "./")
+    dem_filename = "dem.envi"
+    xml_filename = f"{dem_filename}.xml"
+    dem_name = "dem.envi"
+
+    shutil.copy(DEM_LOCATION, "./")
+    shutil.copy(DEM_LOCATION +".xml", "./")
+
     get_granule(reference_granule["download_url"])
     get_granule(secondary_granule["download_url"])
 
