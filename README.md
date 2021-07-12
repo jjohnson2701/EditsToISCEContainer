@@ -12,27 +12,25 @@ Notes here are based on my workflow and subject to future change and clarificati
 * jobscript_array.sh
 * arcgis_template.xml -no edits are needed
 * insar.py -no edits needed 
-* topsApp_5m template.xml
+* topsApp_template.xml
 * LagosP1F16Asc.txt -Provided as an example of an input file
 
-### 3. Edit jobscript_5m_array settings. Relevant ones to change are listed here in the order they appear:
- #SBATCH --ntasks sets the number of tasks per job. It is more efficient to run larger batched jobs with the least number of tasks possible, while still finishing the job under 24 hours.
- 
-#SBATCH --mail-user input for the email address of the user, which receives an alert when the job finishes. Change this to your own email
+### 3. Edit jobscript_array settings. Relevant ones to change are listed here in the order they appear:
+Change line 18 in jobscript_array.sh: #SBATCH --mail-user input for the email address of the user, which receives an alert when the job finishes. Change this to your own email
 
-#SBATCH --array declares which of the array elements to run, up to 1000 pairs in parallel. This command  is based off of a text file that lists SAR images to be downloaded from ASF. The provided example has a list of images over Lagos, with path 1, Frame 16, ascending view. 
+Change line 20 in jobscript_array.sh: #SBATCH --array declares which of the array elements to run, up to 1000 pairs in parallel. This command  is based off of a text file that lists SAR images to be downloaded from ASF. The provided example has a list of images over Lagos, with path 1, Frame 16, ascending view. The list has 54 lines, so 1-53 are the max pairs that can be ran (since the jobscript_array uses 53+1 for the secondary image).
 
-SARimagelistexample.txt is set to a text file list of SLC images to process sequentially.
+Change line 33 in jobscript_array.sh: export DEM_LOCATION=/projects/$USER/dems/Lagos/5m/dem.envi to where your DEM is located. 
 
-#Extract names of granules for given array ID. You will need to make a list pairs, or in this case a reference secondary image list. My naming convention has the path, frame, and other info included. The code below will match each reference granule with the following image. Edits can be made to run one reference image against several secondaries. More on this in step 5.
+#Extract names of granules for given array ID. The code below will match each reference granule with the following image. Change LagosP1F16Asc.txt to your formatted file list, with the oldest image listed first, and most recent at the bottom. 
 
-REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosP1F16Asc.txt)
+Change line 38 in jobscript_array.sh: REF_GRANULE=$(sed -n "${SLURM_ARRAY_TASK_ID}p" LagosP1F16Asc.txt)
+Change line 39 in jobscript_array.sh: SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 
-SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
-	
+Change line 44 in jobscript_array.sh: SETUP_DIR=/scratch/summit/$USER/Lagos/5m to an existing folder where you want your results to be stored
 
-JOBDIR can also be changed according to your file structure. A quick sketch of mine is provided at the bottom of the instructions 
-Be sure the –username and –password fields have your earthdata login instead of mine. *Make a link to earthdata setup here
+Change line 62 in jobscript_array.sh: Be sure the –username and –password fields have your earthdata login
+
 ### 4. DEM setup: 
 The DOCKER wants a dem named “dem.envi” with SRTM pixel convention. These instructions assume that you have access to a DEM for processing. If you are happy with a standard DEM, you can skip this step.
 
