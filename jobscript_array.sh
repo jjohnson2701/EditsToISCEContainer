@@ -56,7 +56,7 @@ cp $SETUP_DIR/arcgis_template.xml arcgis_template.xml
 cp $SETUP_DIR/insar.py insar.py
 cp $SETUP_DIR/topsApp_template.xml topsApp_template.xml
 
-singularity exec --bind ${PWD}:/output --bind /scratch/summit /projects/krti5528/containers/apt-insar.sif python3 -u insar.py \
+singularity exec --bind ${PWD}:/output --bind /scratch/summit /projects/jojo8550/containers/apt-insar.sif python3 -u insar.py \
  --reference-granule $REF_GRANULE \
  --secondary-granule $SND_GRANULE \
  --username jojohnson --password summitS3tuo
