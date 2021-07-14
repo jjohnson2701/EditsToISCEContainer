@@ -12,10 +12,10 @@ Notes here are based on my workflow and subject to future change and clarificati
 
 ### 2. Copy the following files into your containers directory, which is created in the installation in step one. 
 * jobscript_array.sh
-* arcgis_template.xml -no edits are needed
+* arcgis_template.xml -no edits needed
 * insar.py -no edits needed 
 * topsApp_template.xml
-* LagosP1F16Asc.txt -Provided as an example of an input file
+* LagosP1F16Asc.txt -example input file
 
 ### 3. DEM setup: 
 The DOCKER wants a dem named “dem.envi” with SRTM pixel convention. If you are happy with a standard DEM, you can skip this step and it will download automatically. They can also be downloaded from https://apps.nationalmap.gov/downloader/#/ 
