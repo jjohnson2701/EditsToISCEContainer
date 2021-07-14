@@ -8,7 +8,7 @@ Notes here are based on my workflow and subject to future change and clarificati
 
 ## ISCE with Research computing setup: Steps for using your own DEM and submitting job arrays
 
-#### 1. Follow all the steps to download the ASF DOCKER from the RC Computing github: https://github.com/ResearchComputing/asf-insar-singularity
+#### 1. Follow the steps to download the ASF DOCKER from the RC Computing github: https://github.com/ResearchComputing/asf-insar-singularity
 
 ### 2. Copy the following files into your containers directory, which is created in the installation in step one. 
 * jobscript_array.sh
