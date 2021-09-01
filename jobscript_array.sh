@@ -40,6 +40,7 @@ SND_GRANULE=$(sed -n "$(expr $SLURM_ARRAY_TASK_ID + 1)p" LagosP1F16Asc.txt)
 
 echo $REF_GRANULE 
 echo $SND_GRANULE
+echo ${REF_GRANULE:17:8}_${SND_GRANULE:17:8}
 
 SETUP_DIR=/scratch/summit/$USER/Lagos/5m
 #echo $SETUP_DIR
