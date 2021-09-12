@@ -4,7 +4,7 @@
     <property name="unwrapper name">icu</property>
     <property name="azimuth looks">1</property>
     <property name="range looks">3</property>
-    <property name="geocode list">['merged/phsig.cor', 'merged/filt_topophase.unw']</property>
+ <property name="geocode list">['merged/phsig.cor','merged/filt_topophase.unw', 'merged/los.rdr']</property>
     <property name="do esd">False</property>
     {% if dem_filename %}
     <property name="dem filename">/projects/jojo8550/dems/Lagos/5m/dem.envi</property>
