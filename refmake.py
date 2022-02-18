@@ -1,7 +1,5 @@
 import numpy as np
-import argparse
-
-# Example of LagosDesc.txt below: (May include 100's of scenes)
+# Example of LagosDesc.txt below: (May include 100's of scenes). 
 # S1A_IW_SLC__1SDV_20180313T052943_20180313T053012_020992_0240A7_005E
 # S1A_IW_SLC__1SDV_20180325T052943_20180325T053013_021167_024636_8444
 # S1A_IW_SLC__1SDV_20180406T052943_20180406T053013_021342_024BB1_0382
@@ -10,16 +8,13 @@ import argparse
 # S1A_IW_SLC__1SDV_20180512T052945_20180512T053015_021867_025C3F_40B0
 # S1A_IW_SLC__1SDV_20180524T052945_20180524T053015_022042_0261CD_9A5C
 # S1A_IW_SLC__1SDV_20180605T052946_20180605T053016_022217_026756_8F57
-
-
-
 a = np.loadtxt('LagosDesc.txt', dtype=str)
 
 ref = []
 sec = []
 pairlist= []
 
-# This runs for 4 consecutive pairs
+# This runs for 4 consecutive pairs. Note that this current code does not generate the last few possible pairings. 
 for i in range(a.shape[0]-4):
 	for j in [1,2,3,4]:
 		ref.append(a[i])
