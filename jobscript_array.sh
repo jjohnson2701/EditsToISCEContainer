@@ -15,9 +15,11 @@
 #SBATCH --output=aptinsar.%A_%a.out   # Output file name with Job ID
 
 #SBATCH --mail-type=END            # Email user when job finishes
-#SBATCH --mail-user=jojo8550@colorado.edu # Email address of user
+#SBATCH --mail-user=you0000@colorado.edu # Email address of user. Change to your own
 
-#SBATCH --array=1-2
+#SBATCH --array=1-2 
+#At the moment there seems to be an ASF bottleneck if you submit and try to download more than 180 at a time. 
+#If you have more, batching them separated by a few hours is recommended.
 
 # purge all existing modules
 module purge
